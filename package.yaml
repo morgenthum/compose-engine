@@ -1,0 +1,28 @@
+name:                compose-engine
+version:             0.1.0.0
+github:              "morgenthum/compose-engine"
+license:             BSD3
+author:              "Mario Morgenthum"
+maintainer:          "mario.morgenthum@gmail.com"
+copyright:           "2019 Mario Morgenthum"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/morgenthum/compose-engine#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- mtl >= 2.2.2
+- sdl2 >= 2.4.1.0
+
+library:
+  source-dirs: src
