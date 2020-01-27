@@ -1,5 +1,6 @@
 module ComposeEngine.Types.Loop where
 
+import Control.Lens
 import           Control.Monad.Reader
 import           Control.Monad.State
 import           ComposeEngine.Types.Timer
@@ -21,6 +22,15 @@ getUpdateState = do
   eitherState <- gets snd
   let Right state = eitherState
   return state
+
+modifyUpdateState :: (s -> s) -> UpdateState s r ()
+modifyUpdateState f = modify (\(timer, Right s) -> (timer, Right $ f s))
+
+overUpdateState :: StateT (t, Either r s1) Identity a -> Getting s1 s2 s1 -> ASetter s2 s2 s s1 -> (t, Either r s2) -> (t, Either r s2)
+overUpdateState f from to (t, Right s) =
+  let (t', Right s') = execState f (t, Right $ view from s)
+   in (t', Right $ set to s' s)
+overUpdateState _ _ _ s = s
 
 putUpdateTimer :: LoopTimer -> UpdateState s r ()
 putUpdateTimer timer = do

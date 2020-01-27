@@ -5,6 +5,7 @@ module ComposeEngine.Loop
   , Output
   , Render
   , noInput
+  , noUpdate
   , noOutput
   , noRender
   , startLoop
@@ -22,6 +23,9 @@ type LoopState m s r = M.StateT (Timer.LoopTimer, Either r s) m
 
 noInput :: (Monad m) => Input m ()
 noInput = return ()
+
+noUpdate :: Update s r e
+noUpdate _ = return ()
 
 noOutput :: (Monad m) => Output m s r e
 noOutput _ = return ()
