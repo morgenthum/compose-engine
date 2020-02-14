@@ -1,17 +1,22 @@
 module ComposeEngine.Types.Loop where
 
+import ComposeEngine.Types.Timer
 import Control.Lens
-import           Control.Monad.Reader
-import           Control.Monad.State
-import           ComposeEngine.Types.Timer
+import Control.Monad.Reader
+import Control.Monad.State
 
 type UpdateState s r = State (LoopTimer, Either r s)
+
 type OutputState m s r = ReaderT (LoopTimer, Either r s) m
+
 type RenderState m s = ReaderT (LoopTimer, s) m
 
 type Input m i = m i
+
 type Update s r i = i -> UpdateState s r ()
+
 type Output m s r i = i -> OutputState m s r ()
+
 type Render m s = RenderState m s ()
 
 getUpdateTimer :: UpdateState s r LoopTimer
@@ -26,7 +31,12 @@ getUpdateState = do
 modifyUpdateState :: (s -> s) -> UpdateState s r ()
 modifyUpdateState f = modify (\(timer, Right s) -> (timer, Right $ f s))
 
-overUpdateState :: StateT (t, Either r s1) Identity a -> Getting s1 s2 s1 -> ASetter s2 s2 s s1 -> (t, Either r s2) -> (t, Either r s2)
+overUpdateState ::
+  StateT (t, Either r s1) Identity a ->
+  Getting s1 s2 s1 ->
+  ASetter s2 s2 s s1 ->
+  (t, Either r s2) ->
+  (t, Either r s2)
 overUpdateState f from to (t, Right s) =
   let (t', Right s') = execState f (t, Right $ view from s)
    in (t', Right $ set to s' s)
